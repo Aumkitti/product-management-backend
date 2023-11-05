@@ -22,3 +22,5 @@ app.listen(PORT, ()=>{
   console.log("Server is running on http://localhost:"+PORT)
 })
 
+const productsRoutes = require('./routes/Product')
+app.use(productsRoutes)
