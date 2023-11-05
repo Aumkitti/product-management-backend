@@ -25,7 +25,7 @@ db.sequelize = sequelize;
 db.user = require("./user.model")(sequelize, Sequelize);
 db.role = require("./role.model")(sequelize, Sequelize);
 
-//one to many
+
 db.role.belongsToMany(db.user,{
     through:"users_roles"
 });
