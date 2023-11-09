@@ -1,15 +1,9 @@
 const {Sequelize} = require("sequelize");
 const dbConfig = require("../config/dbconfig.js");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD,{
-    host:dbConfig.HOST,
-    dialect:"postgres",
-    dialectOptions:{
-        ssl: {
-            require: true,
-            rejectUthorized: false,
-        },
-    },
-    
+
+const sequelize = new Sequelize('products', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql' 
 });
 
 async function testConection(){
