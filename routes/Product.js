@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get("/api/product/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await getProductById(productId);
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete("/product/:id", async (req, res)=>{
+router.delete("/:id", async (req, res)=>{
   try {
       const productId = req.params.id;
       const isDelete = await Product.removeById(productId);
