@@ -1,14 +1,18 @@
-module.exports = (sequelize, Sequelize) =>{
-    const User = sequelize.define("user", {
-        username: {
-            type: Sequelize.STRING,
-        },
-        email: {
-            type: Sequelize.STRING,
-        },
-        password: {
-            type: Sequelize.STRING,
-        },
-    });
-    return User;
-};
+const mongoose = require("mongoose");
+
+const User = mongoose.model(
+  "User",
+  new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+    roles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role"
+      }
+    ]
+  })
+);
+
+module.exports = User

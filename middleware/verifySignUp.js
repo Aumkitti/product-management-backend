@@ -1,4 +1,4 @@
-const db = require("../models")
+const db = require("../model")
 const ROLES = db.ROLES;
 const User = db.user;
 
@@ -42,6 +42,7 @@ checkRolesExisted = (req, res, next) => {
                     .send({
                         message: "Failed Role does not exist " + req.body.roles[i],
                     });
+                    return;
             }
         }
 

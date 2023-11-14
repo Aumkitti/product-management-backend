@@ -1,50 +1,13 @@
-const config = require("../config/dbconfig")
-
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
-    host:config.HOST,
-    dialect:config.dialect,
-    dialectOptions:{
-        ssl:{
-            require:true,
-            rejectUnauthorized:false
-        }
-    },
-    pool:{
-        max:config.pool.max,
-        min:config.pool.min,
-        acquire:config.pool.acquire,
-        idle:config.pool.idle
-    }
-})
-console.log(config);
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 const db = {};
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
 
-db.user = require("./user.model")(sequelize, Sequelize);
-db.role = require("./role.model")(sequelize, Sequelize);
-db.refreshToken = require("./refreshToken.model")(sequelize, Sequelize);
-//one to many
-db.role.belongsToMany(db.user,{
-    through:"users_roles"
-});
-//one to many
-db.user.belongsToMany(db.role, {
-    through: "users_roles"
-});
+db.mongoose = mongoose;
 
-//one to one
-db.refreshToken.belongsTo(db.user,{
-    foreignKey:'userId',
-    targetKey:"id"
-});
-db.user.hasOne(db.refreshToken,{
-    foreignKey: 'userId',
-    targetKey: "id"
-})
+db.user = require("./user.model");
+db.role = require("./role.model");
 
-db.ROLES=("user","admin","moderator")
+db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;

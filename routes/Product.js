@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.find();
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -23,54 +23,53 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const productId = req.params.id;
-    const product = await getProductById(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-    return res.status(200).json(product);
+      const products = await Product.findById(req.params.id);
+      res.json(products);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to retrieve product" });
+      if (error.kind === "not_found!") {
+          res.status(400).json("Product not found!")
+      }else{
+          res.status(500).json({error:"Failed to get Product data!"});
+      }
   }
 });
-
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, details, type, image } = req.body;
 
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(id, { name, details, type, image }, { new: true });
+    const [updatedCount, updatedProducts] = await Product.update(
+      { name, details, type, image },
+      { where: { id }, returning: true }
+    );
 
-    if (!updatedProduct) {
+    if (updatedCount === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    res.json(updatedProduct);
+    res.json(updatedProducts[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-router.delete("/:id", async (req, res)=>{
+router.delete("/:id", async (req, res) => {
   try {
-      const productId = req.params.id;
-      const isDelete = await Product.removeById(productId);
-      if (isDelete) {
-      res.status(204).json({message: "Product id " + productId + "is deleted", isDeleted:isDelete});
-      }
+    const productId = req.params.id;
+    const deletedCount = await Product.destroy({ where: { id: productId } });
+
+    if (deletedCount === 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(204).json({ message: "Product id " + productId + " is deleted", isDeleted: true });
   } catch (error) {
-      if (error.kind === "not_found") {
-          res.status(404).json({error: "Product not found"});
-      }else {
-          res.status(500).json({error: "failed to Delete Product data"});
-      }
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete Product data" });
   }
 });
 
