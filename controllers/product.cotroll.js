@@ -1,4 +1,3 @@
-// productController.js
 const Product = require('../model/product.management');
 
 const createProduct = async (req, res) => {

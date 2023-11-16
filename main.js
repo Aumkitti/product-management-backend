@@ -1,4 +1,3 @@
-// app.js (หรือไฟล์หลักของ Express)
 const express = require('express');
 const bodyParser = require('body-parser');
 const productRoutes = require('./routes/Product');
@@ -10,7 +9,7 @@ const cookieSession = require("cookie-session");
 const db = require("./model");
 const Role = db.role;
 const session = require('express-session');
-const finalhandler = require('finalhandler');
+//const finalhandler = require('finalhandler');
 
 
 mongoose.Promise = global.Promise;
@@ -78,17 +77,19 @@ app.post('/api/auth/signin', (req, res) => {
   // Handle the signin logic here
   res.status(200).json({ message: 'Signin successful' });
 });
+
+
 app.get("/", (req, res) => {
   res.send("<h1>Product Management</h1>");
 });
 
-app.use((req, res) => {
+/*app.use((req, res) => {
   // Handle the request or call finalhandler
   const done = finalhandler(req, res);
   done();
 });
-
-app.use(cookieSession({name: "niti-session",keys: ["COOKIE_SECRET"], }));
+*/
+app.use(cookieSession({name: "Kittipong-session",keys: ["COOKIE_SECRET"], }));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

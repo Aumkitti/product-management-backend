@@ -23,7 +23,7 @@ module.exports = (sequelize,Sequelize)=>{
     }
 
     RefreshToken.verifyExpiration = (token) => {
-        //true = expired, false not expired
+        //true = หมดอายุ, false ไม่หมดอายุ
         return token.expiryDate.getTime() < new Date().getTime();
     }
     return RefreshToken;
